@@ -74,3 +74,31 @@ class BooksToScrape_category:
          x[0] = "https://books.toscrape.com/catalogue/category"
          self.list_all_category_urls.append("/".join(x))
 
+
+#--------------------------PROGRAMME--------------------------
+
+
+super_category_book = BooksToScrape_category()
+print()
+for i in range(0,len(super_category_book.list_all_category_urls)):
+   x = Category_book(super_category_book.list_all_category_urls[i])
+   print(f"OK -- {x.heading} : {len(x.list_urls_livres)} books")
+   for u in range(0, len(x.list_urls_livres)):
+      y = Book(x.list_urls_livres[u])
+      print(f"{u+1} >> {y.title_book}")
+   print()
+
+# with open("test.csv", "w", newline="\n") as csvfile:
+#    csv.writer(csvfile).writerow("ergrdgbrfsefsef, fefe, fesfs")
+
+
+
+
+
+
+"""
+   VSC : retour à la ligne '\n' + virgules pour changer de cellule
+   https://www.scrapingbee.com/blog/download-image-python/
+   Paramétrer les class pour qu'elles soient parentes ?
+   
+""" 
