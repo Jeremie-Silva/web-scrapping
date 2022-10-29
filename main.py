@@ -58,3 +58,19 @@ class Category_book:
       soup = BeautifulSoup(requests.get(self.urls_category[-1]).content, "html.parser")
       self.catch_urls_books(soup)
 
+
+class BooksToScrape_category:
+   def __init__(self):
+      self.url_parent = "https://books.toscrape.com/catalogue/category/books_1/index.html"
+      soup = BeautifulSoup(requests.get(self.url_parent).content, "html.parser")
+      self.list_all_category_urls = []
+      self.catch_urls_category(soup)
+      print(f"Total : {len(self.list_all_category_urls)} category")
+
+   def catch_urls_category(self, soup):
+      # Recuperer l'URL de chaque categories et incrementer la liste
+      for i in range(0,len(soup.select("div.side_categories > ul.nav > li > ul > li > a"))):
+         x = soup.select("div.side_categories > ul.nav > li > ul > li > a")[i].get("href").split("/")
+         x[0] = "https://books.toscrape.com/catalogue/category"
+         self.list_all_category_urls.append("/".join(x))
+
