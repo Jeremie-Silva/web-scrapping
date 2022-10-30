@@ -1,14 +1,15 @@
-import requests
-from bs4 import BeautifulSoup
 import re
 import csv
+import requests
+from bs4 import BeautifulSoup
+
 
 URL_MAIN = "https://books.toscrape.com"
 
 
 class Book:
     def __init__(self,
-                 url_product):
+                 url_product: str):
         # Récupérer et perser le html de la page produit
         soup = BeautifulSoup(requests.get(url_product).content, "html.parser")
         self.product_page_url = url_product
@@ -29,7 +30,7 @@ class Book:
         self.image_url = soup.find("div", class_="item active").img.get("src")
         self.title_book = soup.find("h1").contents[0]
 
-    def catch_product_description(self, soup):
+    def catch_product_description(self, soup: str):
         # On evite que le programme ne bloque si la description est vide
         x = soup.select("article.product_page > p")
         if x == []:
