@@ -36,8 +36,7 @@ jobs:
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
-          command: flake8
-          allow_failure : true
+          command: flake8 || true
 
 
 # Invoke jobs via workflows
