@@ -52,6 +52,8 @@ jobs:
     # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
+    parameters:
+    	src: .
     steps:
       - checkout
       - python/install-packages:
@@ -60,6 +62,7 @@ jobs:
           # pip-dependency-file: test-requirements.txt  # if you have a different name for your requirements file, maybe one that combines your runtime and test requirements.
       - run:
           name: Pylint
+          src: .
           # This assumes pytest is installed via the install-package step above
           command: pylint || true
 
