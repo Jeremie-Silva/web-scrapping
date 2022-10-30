@@ -3,4 +3,4 @@ pylint
 requests
 beautifulsoup4
 mypy
-mypy --install-types
+--install-types
