@@ -3,3 +3,4 @@ pylint
 requests
 beautifulsoup4
 mypy
+types-requests
