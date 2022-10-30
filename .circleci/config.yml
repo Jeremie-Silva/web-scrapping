@@ -86,7 +86,7 @@ jobs:
           name: mypy
           # This assumes pytest is installed via the install-package step above
           command: |
-           -U mypy
+           mypy -U
            mypy --disallow-untyped-defs *.py
 
 
