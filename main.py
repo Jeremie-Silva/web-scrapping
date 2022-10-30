@@ -30,7 +30,7 @@ class Book:
         self.image_url = soup.find("div", class_="item active").img.get("src")
         self.title_book = soup.find("h1").contents[0]
 
-    def catch_product_description(self, soup: str):
+    def catch_product_description(self, soup: str) -> str:
         # On evite que le programme ne bloque si la description est vide
         x = soup.select("article.product_page > p")
         if x == []:
