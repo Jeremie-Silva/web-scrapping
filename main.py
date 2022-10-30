@@ -9,7 +9,7 @@ URL_MAIN = "https://books.toscrape.com"
 class Book:
     def __init__(self,
                  url_product):
-       # Récupérer et perser le html de la page produit
+        # Récupérer et perser le html de la page produit
         soup = BeautifulSoup(requests.get(url_product).content, "html.parser")
         self.product_page_url = url_product
         self.universal_product_code = soup.find(
@@ -30,7 +30,7 @@ class Book:
         self.title_book = soup.find("h1").contents[0]
 
     def catch_product_description(self, soup):
-       # On evite que le programme ne bloque si la description est vide
+        # On evite que le programme ne bloque si la description est vide
         x = soup.select("article.product_page > p")
         if x == []:
             self.product_description = x
@@ -108,5 +108,5 @@ for i in range(0, len(super_category_book.list_all_category_urls)):
    VSC : retour à la ligne '\n' + virgules pour changer de cellule
    https://www.scrapingbee.com/blog/download-image-python/
    Paramétrer les class pour qu'elles soient parentes ?
-   
+
 """
