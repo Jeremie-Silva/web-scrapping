@@ -1,5 +1,6 @@
 flake8
 pylint
-mypy
 requests
 beautifulsoup4
+mypy
+mypy --install-types
