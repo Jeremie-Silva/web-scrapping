@@ -53,7 +53,7 @@ jobs:
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
     parameters:
-    	src: .
+      src: .
     steps:
       - checkout
       - python/install-packages:
