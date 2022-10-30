@@ -5,9 +5,11 @@ import csv
 
 URL_MAIN = "https://books.toscrape.com"
 
+
 class Book:
-   def __init__(self, url_product):
-      # Récupérer et perser le html de la page produit
+   def __init__(self, 
+       url_product):
+       # Récupérer et perser le html de la page produit
       soup = BeautifulSoup(requests.get(url_product).content, "html.parser")
       self.product_page_url = url_product
       self.universal_product_code = soup.find("th", string="UPC").parent.td.contents[0]
