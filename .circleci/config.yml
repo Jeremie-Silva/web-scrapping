@@ -85,9 +85,8 @@ jobs:
       - run:
           name: mypy
           # This assumes pytest is installed via the install-package step above
-            #mypy --install-types
           command: |
-            mypy main.py
+            mypy --disallow-untyped-defs main.py
 
 
 # Invoke jobs via workflows
