@@ -87,7 +87,7 @@ jobs:
           # This assumes pytest is installed via the install-package step above
           command: |
            mypy --install-types
-           mypy *.py
+           mypy main.py
 
 
 # Invoke jobs via workflows
