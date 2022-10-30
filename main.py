@@ -30,17 +30,19 @@ class Book:
         self.image_url = soup.find("div", class_="item active").img.get("src")
         self.title_book = soup.find("h1").contents[0]
 
-    def catch_product_description(self, soup: str) -> str:
+    def catch_product_description(self, soup: BeautifulSoup) -> None:
         # On evite que le programme ne bloque si la description est vide
         x = soup.select("article.product_page > p")
         if x == []:
             self.product_description = x
+            return None
         else:
             self.product_description = x[0].contents[0]
+            return None
 
 
 class Category_book:
-    def __init__(self, url_category):
+    def __init__(self, url_category: str):
         soup = BeautifulSoup(requests.get(url_category).content, "html.parser")
         # Liste contenant toutes les URLs de la pagination
         self.urls_category = [url_category]
@@ -48,7 +50,7 @@ class Category_book:
         self.catch_urls_books(soup)
         self.heading = soup.find("h1").contents[0]
 
-    def catch_urls_books(self, soup):
+    def catch_urls_books(self, soup: BeautifulSoup) -> None:
         # Recupere tous les liens placés sur des <h3> dans le corps de la page
         for i in range(0, len(soup.select("ol.row h3 a"))):
             x = soup.select("ol.row h3 a")[i].get("href").split("/")
@@ -58,8 +60,9 @@ class Category_book:
         # Verifie si il y a un bouton de pagination
         if soup.find("li", class_="next"):
             self.pagination_category(soup)
+        return None
 
-    def pagination_category(self, soup):
+    def pagination_category(self, soup: BeautifulSoup) -> None:
         # Recupere l'URL de la prochaine page de pagination et la rajoute dans la liste des URLs
         url_category_split = self.urls_category[-1].split("/")
         url_category_split[-1] = soup.select("li.next a")[0].get("href")
@@ -68,10 +71,11 @@ class Category_book:
         soup = BeautifulSoup(requests.get(
             self.urls_category[-1]).content, "html.parser")
         self.catch_urls_books(soup)
+        return None
 
 
 class BooksToScrape_category:
-    def __init__(self):
+    def __init__(self) -> None:
         self.url_parent = "https://books.toscrape.com/catalogue/category/books_1/index.html"
         soup = BeautifulSoup(requests.get(
             self.url_parent).content, "html.parser")
@@ -79,13 +83,14 @@ class BooksToScrape_category:
         self.catch_urls_category(soup)
         print(f"Total : {len(self.list_all_category_urls)} category")
 
-    def catch_urls_category(self, soup):
+    def catch_urls_category(self, soup: BeautifulSoup) -> None:
         # Recuperer l'URL de chaque categories et incrementer la liste
         for i in range(0, len(soup.select("div.side_categories > ul.nav > li > ul > li > a"))):
             x = soup.select("div.side_categories > ul.nav > li > ul > li > a")[
                 i].get("href").split("/")
             x[0] = "https://books.toscrape.com/catalogue/category"
             self.list_all_category_urls.append("/".join(x))
+        return None
 
 
 # --------------------------PROGRAMME--------------------------
@@ -100,6 +105,8 @@ for i in range(0, len(super_category_book.list_all_category_urls)):
         y = Book(x.list_urls_livres[u])
         print(f"{u+1} >> {y.title_book}")
     print()
+
+x = Book("https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html")
 
 # with open("test.csv", "w", newline="\n") as csvfile:
 #    csv.writer(csvfile).writerow("ergrdgbrfsefsef, fefe, fesfs")
