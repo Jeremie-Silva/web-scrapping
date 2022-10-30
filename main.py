@@ -1,7 +1,7 @@
 import re
 import csv
 import requests
-from bs4 import BeautifulSoup # type: ignore
+from bs4 import BeautifulSoup  # type: ignore
 
 
 URL_MAIN = "https://books.toscrape.com"
