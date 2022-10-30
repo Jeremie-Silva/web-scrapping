@@ -1,7 +1,7 @@
 import re
 import csv
 import requests
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup # type: ignore
 
 
 URL_MAIN = "https://books.toscrape.com"
@@ -46,7 +46,7 @@ class Category_book:
         soup = BeautifulSoup(requests.get(url_category).content, "html.parser")
         # Liste contenant toutes les URLs de la pagination
         self.urls_category = [url_category]
-        self.list_urls_livres = []
+        self.list_urls_livres: list[str] = []
         self.catch_urls_books(soup)
         self.heading = soup.find("h1").contents[0]
 
@@ -79,7 +79,7 @@ class BooksToScrape_category:
         self.url_parent = "https://books.toscrape.com/catalogue/category/books_1/index.html"
         soup = BeautifulSoup(requests.get(
             self.url_parent).content, "html.parser")
-        self.list_all_category_urls = []
+        self.list_all_category_urls: list[str] = []
         self.catch_urls_category(soup)
         print(f"Total : {len(self.list_all_category_urls)} category")
 
@@ -106,7 +106,6 @@ for i in range(0, len(super_category_book.list_all_category_urls)):
         print(f"{u+1} >> {y.title_book}")
     print()
 
-x = Book("https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html")
 
 # with open("test.csv", "w", newline="\n") as csvfile:
 #    csv.writer(csvfile).writerow("ergrdgbrfsefsef, fefe, fesfs")
