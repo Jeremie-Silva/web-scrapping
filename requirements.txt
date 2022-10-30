@@ -2,5 +2,5 @@ flake8
 pylint
 mypy
 requests
-bs4
+beautifulsoup4
 csv
