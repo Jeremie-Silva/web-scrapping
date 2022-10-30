@@ -3,4 +3,3 @@ pylint
 mypy
 requests
 beautifulsoup4
-csv
