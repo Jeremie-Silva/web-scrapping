@@ -2,4 +2,4 @@ flake8
 pylint
 requests
 beautifulsoup4
-mypy -U
+-U mypy
