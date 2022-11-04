@@ -1,17 +1,19 @@
+"""Script to scrap https://books.toscrape.com"""
 import re
 import csv
 import requests
 from bs4 import BeautifulSoup  # type: ignore
 
 
-URL_MAIN:str = "https://books.toscrape.com"
+URL_MAIN: str = "https://books.toscrape.com"
 PATH_URL_CATEGORY: str = "https://books.toscrape.com/catalogue"
 URL_META_CATEGORY_BOOK: str = "https://books.toscrape.com/catalogue/category/books_1/index.html"
 PATH_URL_META_CATEGORY: str = "https://books.toscrape.com/catalogue/category"
 
+
 class Book:
-    """Cette class permet de scrapper le contenu d'une page livre,
-    et inscremete le self de chaque instance avec les valeurs scrappées.
+    """Cette class permet de scraper le contenu d'une page livre,
+    et inscremete le self de chaque instance avec les valeurs scrapées.
     """
     def __init__(self, url_product: str):
     # Initialisation de l'instance à partir de l'url du livre passé en parametre
@@ -41,13 +43,12 @@ class Book:
         if x == []:
             self.product_description = x
             return None
-        else:
-            self.product_description = x[0].contents[0]
-            return None
+        self.product_description = x[0].contents[0]
+        return None
 
 
 class Category_book:
-    """Cette classe permet de scrapper les urls des livres sur les pages catégorie,
+    """Cette classe permet de scraper les urls des livres sur les pages catégorie,
     en tenant compte de l'éventuelle pagination,
     et incrémente une liste avec les valeurs.
     """
@@ -61,7 +62,7 @@ class Category_book:
         self.heading = soup.find("h1").contents[0]
 
     def catch_urls_books(self, soup: BeautifulSoup) -> None:
-    # Permet de scrapper une page de catégorie et incrémente la liste des urls de cette catégorie
+    # Permet de scraper une page de catégorie et incrémente la liste des urls de cette catégorie
         # Récupere tous les liens placés sur des balises <h3> dans le corps de la page
         for i in range(0, len(soup.select("ol.row h3 a"))):
             x = soup.select("ol.row h3 a")[i].get("href").split("/")
@@ -86,7 +87,7 @@ class Category_book:
 
 
 class BooksToScrape_category:
-    """Cette class permet de scrapper les urls des catégories de livres du site BookToScrape,
+    """Cette class permet de scraper les urls des catégories de livres du site BookToScrape,
     et incrémente une liste avec les valeurs.
     """
     def __init__(self) -> None:
@@ -122,10 +123,10 @@ for i in range(0, len(super_category_book.list_all_category_urls)):
 
     # Deuxieme boucle qui cible la catégorie en cours et qui parcours sa liste d'url de livres
     for u in range(0, len(x.list_urls_books)):
-        # Chaque page de livre est scrappée
+        # Chaque page de livre est scrapée
         y = Book(x.list_urls_books[u])
         print(f"{u+1} >> {y.title_book}")
-    
+
     print()
 
 
