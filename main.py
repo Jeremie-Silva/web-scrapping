@@ -56,27 +56,27 @@ class Book:
 
     def initialisation_directory_and_file(self, FIELDNAMES: list) -> None:
         # On vérifie si le dossier général existe et on le crée si ce n'est pas le cas
-        if not os.path.exists("web-scrapping/Data_books_to_scrape"):
-            os.mkdir("web-scrapping/Data_books_to_scrape")
+        if not os.path.exists("Data_books_to_scrape"):
+            os.mkdir("Data_books_to_scrape")
         # On vérifie si le dossier des catégories existe et on le crée si ce n'est pas le cas
-        if not os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}"):
-            os.mkdir(f"web-scrapping/Data_books_to_scrape/{self.category}")
+        if not os.path.exists(f"Data_books_to_scrape/{self.category}"):
+            os.mkdir(f"Data_books_to_scrape/{self.category}")
         # On vérifie si le dossier des images existe et on le crée si ce n'est pas le cas
-        if not os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}/images_{self.category}"):
-            os.mkdir(f"web-scrapping/Data_books_to_scrape/{self.category}/images_{self.category}")
+        if not os.path.exists(f"Data_books_to_scrape/{self.category}/images_{self.category}"):
+            os.mkdir(f"Data_books_to_scrape/{self.category}/images_{self.category}")
         # On vérifie si le fichier existe et on choisit le mode d'ouverture en fonction
-        if os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}/{self.category}.csv"):
+        if os.path.exists(f"Data_books_to_scrape/{self.category}/{self.category}.csv"):
             csv_mode = "w+"
         else: csv_mode = "x+"
         # On crée le fichier csv ou on le reinitialise et on ajoute les en-têtes
-        with open(f"web-scrapping/Data_books_to_scrape/{self.category}/{self.category}.csv", csv_mode, newline="") as csv_file:
+        with open(f"Data_books_to_scrape/{self.category}/{self.category}.csv", csv_mode, newline="") as csv_file:
             csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writeheader()
 
         return None
 
     def export_csv_file(self, FIELDNAMES: list) -> None:
         # On exporte les données dans un fichier csv portant le nom de la catégorie du livre
-        with open(f"web-scrapping/Data_books_to_scrape/{self.category}/{self.category}.csv", "a", newline="") as csv_file:
+        with open(f"Data_books_to_scrape/{self.category}/{self.category}.csv", "a", newline="") as csv_file:
             csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writerow({
                 'product_page_url': self.product_page_url,
                 'universal_product_code': self.universal_product_code,
@@ -97,7 +97,7 @@ class Book:
         if "/" in self.title_book:
             title = self.title_book.replace("/", "-")
         else: title = self.title_book
-        with open(f"web-scrapping/Data_books_to_scrape/{self.category}/images_{self.category}/{title}.jpg", "wb") as image_file:
+        with open(f"Data_books_to_scrape/{self.category}/images_{self.category}/{title}.jpg", "wb") as image_file:
             image_file.write(image.content)
         return None
 
