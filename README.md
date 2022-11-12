@@ -4,11 +4,19 @@
 ## Installation
 Vous devez avoir **Python** en version 3.10
 
-Pour créer un **environnement virtuel** Python, aller dans un terminal bash et écrire :
+
+Pour télécharger le code du projet, aller dans un terminal bash et écrire :
 
 ```bash
-python3 -m venv nomDuDossierACreer
-source nomDuDossierCree/bin/activate
+git clone "ce depot"
+cd web-scrapping
+```
+
+Pour créer un **environnement virtuel** Python 
+
+```bash
+python3 -m venv env
+source env/bin/activate
 ```
 
 Ensuite installer les dépendances du projet :
@@ -20,5 +28,5 @@ pip install -r requirements.txt
 Lancer le projet :
 
 ```bash
-main.py
+python3 main.py
 ```
