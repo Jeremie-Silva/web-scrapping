@@ -1,9 +1,8 @@
-# web-scrapping
-OC - Project 2
+# web-scrapping : OC - Project 2
 ---
 
 ## Installation
-Vous devez avoir **Python** en version 3.10.
+Vous devez avoir **Python** en version 3.10
 
 Pour créer un **environnement virtuel** Python, aller dans un terminal bash et écrire :
 
