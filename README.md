@@ -8,7 +8,7 @@ Pour créer un **environnement virtuel** Python, aller dans un terminal bash et 
 
 ```bash
 python -m venv nomDuDossierACreer
-source nomDuDossierCree/bin/activat
+source nomDuDossierCree/bin/activate
 ```
 
 Ensuite installer les dépendances du projet :
