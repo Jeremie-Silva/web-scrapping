@@ -1,4 +1,4 @@
-"""Script to scrap https://books.toscrape.com"""
+"""Script to scrap https://books.toscrape.com."""
 import re
 import csv
 import requests
@@ -6,13 +6,14 @@ import os
 from bs4 import BeautifulSoup
 
 
-URL_MAIN: str = "https://books.toscrape.com"
-PATH_URL_CATEGORY: str = "https://books.toscrape.com/catalogue"
+URL_MAIN: str = "https://books.toscrape.com/"
+PATH_URL_CATEGORY: str = "https://books.toscrape.com/catalogue/"
 URL_META_CATEGORY_BOOK: str = "https://books.toscrape.com/catalogue/category/books_1/index.html"
-PATH_URL_META_CATEGORY: str = "https://books.toscrape.com/catalogue/category"
+PATH_URL_META_CATEGORY: str = "https://books.toscrape.com/catalogue/category/"
 FIELDNAMES = ['product_page_url', 'universal_product_code', 'title', 'price_including_tax',
     'price_excluding_tax', 'number_available', 'product_description', 'category',
     'review_rating', 'image_url']
+
 
 class Book:
     """Cette class permet de scraper le contenu d'une page livre,
@@ -37,11 +38,12 @@ class Book:
             "li", class_="active").previous_sibling.previous_sibling.a.contents[0]
         self.review_rating = soup.find(
             "p", class_="star-rating").get("class")[1]
-        self.image_url = soup.find("div", class_="item active").img.get("src")
+        self.image_url = soup.find("div", class_="item active").img.get("src").replace("../..", URL_MAIN)
         self.title_book = soup.find("h1").contents[0]
         # Si count égal 0 alors c'est le premier livre de la catégorie
-        if count == 0: self.initialisation_directory_and_file(FIELDNAMES)
+        if count == 0 : self.initialisation_directory_and_file(FIELDNAMES)
         self.export_csv_file(FIELDNAMES)
+        self.export_images_files()
 
     def catch_product_description(self, soup: BeautifulSoup) -> None:
     # On evite que le programme ne bloque si la description est vide
@@ -53,23 +55,29 @@ class Book:
         return None
 
     def initialisation_directory_and_file(self, FIELDNAMES: list) -> None:
-        # On vérifie si le dossier existe et on le crée si ce n'est pas le cas
+        # On vérifie si le dossier général existe et on le crée si ce n'est pas le cas
         if not os.path.exists("web-scrapping/Data_books_to_scrape"):
             os.mkdir("web-scrapping/Data_books_to_scrape")
+        # On vérifie si le dossier des catégories existe et on le crée si ce n'est pas le cas
+        if not os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}"):
+            os.mkdir(f"web-scrapping/Data_books_to_scrape/{self.category}")
+        # On vérifie si le dossier des images existe et on le crée si ce n'est pas le cas
+        if not os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}/images_{self.category}"):
+            os.mkdir(f"web-scrapping/Data_books_to_scrape/{self.category}/images_{self.category}")
         # On vérifie si le fichier existe et on choisit le mode d'ouverture en fonction
-        if os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}.csv"):
+        if os.path.exists(f"web-scrapping/Data_books_to_scrape/{self.category}/{self.category}.csv"):
             csv_mode = "w+"
         else: csv_mode = "x+"
         # On crée le fichier csv ou on le reinitialise et on ajoute les en-têtes
-        csv_file = open(f"web-scrapping/Data_books_to_scrape/{self.category}.csv", csv_mode, newline="")
-        csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writeheader()
-        csv_file.close()
+        with open(f"web-scrapping/Data_books_to_scrape/{self.category}/{self.category}.csv", csv_mode, newline="") as csv_file:
+            csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writeheader()
+
         return None
 
     def export_csv_file(self, FIELDNAMES: list) -> None:
         # On exporte les données dans un fichier csv portant le nom de la catégorie du livre
-        csv_file = open(f"web-scrapping/Data_books_to_scrape/{self.category}.csv", "a", newline="")
-        csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writerow({
+        with open(f"web-scrapping/Data_books_to_scrape/{self.category}/{self.category}.csv", "a", newline="") as csv_file:
+            csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writerow({
                 'product_page_url': self.product_page_url,
                 'universal_product_code': self.universal_product_code,
                 'title': self.title_book,
@@ -81,7 +89,16 @@ class Book:
                 'review_rating': self.review_rating,
                 'image_url': self.image_url,
             })
-        csv_file.close()
+        return None
+
+    def export_images_files(self) -> None:
+        # On exporte les images dans un dossier portant le nom de la catégorie du livre
+        image = requests.get(self.image_url)
+        if "/" in self.title_book:
+            title = self.title_book.replace("/", "-")
+        else: title = self.title_book
+        with open(f"web-scrapping/Data_books_to_scrape/{self.category}/images_{self.category}/{title}.jpg", "wb") as image_file:
+            image_file.write(image.content)
         return None
 
 
@@ -103,10 +120,8 @@ class Category_book:
     # Permet de scraper une page de catégorie et incrémente la liste des urls de cette catégorie
         # Récupere tous les liens placés sur des balises <h3> dans le corps de la page
         for i in range(0, len(soup.select("ol.row h3 a"))):
-            x = soup.select("ol.row h3 a")[i].get("href").split("/")
-            del x[0:2]
-            x[0] = PATH_URL_CATEGORY
-            self.list_urls_books.append("/".join(x))
+            x = soup.select("ol.row h3 a")[i].get("href")
+            self.list_urls_books.append(x.replace("../../../", PATH_URL_CATEGORY))
         # Verifie si il y a un bouton de pagination
         if soup.find("li", class_="next"):
             self.pagination_category(soup)
@@ -122,6 +137,7 @@ class Category_book:
             self.urls_category[-1]).content, "html.parser")
         self.catch_urls_books(soup)
         return None
+
 
 
 class BooksToScrape_category:
@@ -140,10 +156,8 @@ class BooksToScrape_category:
     def catch_urls_category(self, soup: BeautifulSoup) -> None:
     # Recuperer l'URL de chaque categories et incrementer une liste avec les valeurs
         for i in range(0, len(soup.select("div.side_categories > ul.nav > li > ul > li > a"))):
-            x = soup.select("div.side_categories > ul.nav > li > ul > li > a")[
-                i].get("href").split("/")
-            x[0] = PATH_URL_META_CATEGORY
-            self.list_all_category_urls.append("/".join(x))
+            x = soup.select("div.side_categories > ul.nav > li > ul > li > a")[i].get("href")
+            self.list_all_category_urls.append(x.replace("../", PATH_URL_META_CATEGORY))
         return None
 
 
@@ -169,8 +183,3 @@ for i in range(0, len(super_category_book.list_all_category_urls)):
     print()
 
 print("END")
-
-
-"""
-   https://www.scrapingbee.com/blog/download-image-python/
-"""
