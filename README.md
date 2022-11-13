@@ -30,3 +30,9 @@ Lancer le projet :
 ```bash
 python3 main.py
 ```
+
+Quitter l'environnement virtuel :
+
+```bash
+deactivate
+```
