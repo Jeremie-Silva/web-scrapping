@@ -10,7 +10,7 @@ URL_MAIN: str = "https://books.toscrape.com/"
 PATH_URL_CATEGORY: str = "https://books.toscrape.com/catalogue/"
 URL_META_CATEGORY_BOOK: str = "https://books.toscrape.com/catalogue/category/books_1/index.html"
 PATH_URL_META_CATEGORY: str = "https://books.toscrape.com/catalogue/category/"
-FIELDNAMES = ['product_page_url', 'universal_product_code', 'title', 'price_including_tax',
+FIELDNAMES: list = ['product_page_url', 'universal_product_code', 'title', 'price_including_tax',
     'price_excluding_tax', 'number_available', 'product_description', 'category',
     'review_rating', 'image_url']
 
@@ -71,7 +71,6 @@ class Book:
         # On crée le fichier csv ou on le reinitialise et on ajoute les en-têtes
         with open(f"Data_books_to_scrape/{self.category}/{self.category}.csv", csv_mode, newline="") as csv_file:
             csv.DictWriter(csv_file, fieldnames=FIELDNAMES).writeheader()
-
         return None
 
     def export_csv_file(self, FIELDNAMES: list) -> None:
