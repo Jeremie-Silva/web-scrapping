@@ -9,7 +9,7 @@ Vous devez avoir **Python** en version 3.10
 Pour télécharger le code du projet, aller dans un terminal bash et écrire :
 
 ```bash
-git clone "ce depot"
+git clone git@github.com:Jeremie-Silva/web-scrapping.git
 cd web-scrapping
 ```
 
